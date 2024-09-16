@@ -8,7 +8,6 @@ import RegisterForm from './RegisterForm';
 
 
 
-
 function App() {
 
   
@@ -19,6 +18,8 @@ function App() {
    
    <Route path='/' element={<Login/>}></Route>
    <Route path='/login'element={<Login/>}></Route>
+   <Route path='/' element={<Login/>}></Route>
+    <Route path='/login' element={<Login/>}></Route>
    <Route path='/forgotpass' element={<Forgotpass/>}></Route>
    <Route path='/register' element={<RegisterForm/>}></Route>
    </Routes>
