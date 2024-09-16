@@ -16,9 +16,8 @@ const Forgotpass = () => {
   const [otpValue, setOtpValue] = useState(""); // Value of OTP input
   const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Success popup visibility
 
-
-   // Toggle password visibility
-   const togglePasswordVisibility = () => {
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
     setShowCreatePassword(!showCreatePassword);
     // setShowConfirmPassword(!showConfirmPassword);
   };
@@ -43,20 +42,20 @@ const Forgotpass = () => {
   }, [otp, timer]);
 
   const validateEmail = (email) => {
-    email=email.toLowerCase();
+    email = email.toLowerCase();
     const emailRegex = /^[a-z]+[^\s@]*@(gmail\.com|yahoo\.com|outlook\.com)$/;
     return emailRegex.test(email);
   };
 
-    const validatePhoneNumber=(phone)=>{
-      const phoneRegex=/^[6-9]\d{9}$/;
-      return phoneRegex.test(phone);
-    }
-  
-  const handleEmailChange=(e)=>{
-    const value=e.target.value.replace(/\s+/g, '').toLowerCase();
+  const validatePhoneNumber = (phone) => {
+    const phoneRegex = /^[6-9]\d{9}$/;
+    return phoneRegex.test(phone);
+  };
+
+  const handleEmailChange = (e) => {
+    const value = e.target.value.replace(/\s+/g, "").toLowerCase();
     setInputValue(value);
-  }
+  };
 
   const validatePasswordStrength = (password) => {
     return {
@@ -67,7 +66,6 @@ const Forgotpass = () => {
     };
   };
 
-  
   const validatePasswords = () => {
     let passwordErrors = {};
     if (createPassword.length < 8) {
@@ -89,8 +87,10 @@ const Forgotpass = () => {
   // };
 
   const handleVerify = () => {
-    if (!validateEmail(inputValue) && ! validatePhoneNumber(inputValue)){
-      setErrors({ email: "Please enter a valid email address or a 10-digit phone number", });
+    if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
+      setErrors({
+        email: "Please enter a valid email address or a 10-digit phone number",
+      });
     } else {
       setErrors({});
       console.log("Verified: ", inputValue);
@@ -113,13 +113,13 @@ const Forgotpass = () => {
       setOtpValue(value);
     }
   };
-  const determineMaxLength=()=>{
-    if(validatePhoneNumber(inputValue)){
-      return 10;  //phone numbers
-    }else{
-      return 30;  //email Address
+  const determineMaxLength = () => {
+    if (validatePhoneNumber(inputValue)) {
+      return 10; //phone numbers
+    } else {
+      return 30; //email Address
     }
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -127,8 +127,10 @@ const Forgotpass = () => {
 
     if (Object.keys(passwordErrors).length > 0) {
       setErrors(passwordErrors);
-    } else if (!validateEmail(inputValue) && ! validatePhoneNumber(inputValue)){
-      setErrors({ email: "Please enter a valid email address or a 10-digit phone number", });
+    } else if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
+      setErrors({
+        email: "Please enter a valid email address or a 10-digit phone number",
+      });
     } else {
       setErrors({});
       // Show success popup
@@ -158,7 +160,7 @@ const Forgotpass = () => {
                 placeholder="Email id or number"
                 value={inputValue}
                 maxLength={determineMaxLength(30)}
-            //  or maxLength={determineMaxLength(30)}  // maxLength={validatePhoneNumber(inputValue) ? 10 : 30} {/* Max length for phone numbers and emails */}
+                //  or maxLength={determineMaxLength(30)}  // maxLength={validatePhoneNumber(inputValue) ? 10 : 30} {/* Max length for phone numbers and emails */}
                 onChange={handleEmailChange}
                 // onChange={(e) => setInputValue(e.target.value)}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
@@ -218,27 +220,27 @@ const Forgotpass = () => {
             </label>
             <div className="relative">
               {/* Password Input without type="password" */}
-      <input
-        type="text" // Always type="text", removing the "password" type entirely
-        placeholder="Create a new password"
-        value={createPassword}
-        onChange={(e) => setCreatePassword(e.target.value)}
-        maxLength={8}
-        className="mt-1 w-[83%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
-        style={{
-          WebkitTextSecurity: showCreatePassword ? "none" : "disc",
-          // "disc" hides text with dots (like a password) without using "password" type
-        }}
-      />
-      
-      {/* Button for toggling password visibility */}
-      <button
-        type="button"
-        onClick={togglePasswordVisibility}
-        className="absolute right-24 top-[25px] transform -translate-y-1/2 text-gray-600"
-      >
-        {showCreatePassword ? <FaEyeSlash /> : <FaEye />}
-      </button>
+              <input
+                type="text" // Always type="text", removing the "password" type entirely
+                placeholder="Create a new password"
+                value={createPassword}
+                onChange={(e) => setCreatePassword(e.target.value)}
+                maxLength={8}
+                className="mt-1 w-[83%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                style={{
+                  WebkitTextSecurity: showCreatePassword ? "none" : "disc",
+                  // "disc" hides text with dots (like a password) without using "password" type
+                }}
+              />
+
+              {/* Button for toggling password visibility */}
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-24 top-[25px] transform -translate-y-1/2 text-gray-600"
+              >
+                {showCreatePassword ? <FaEyeSlash /> : <FaEye />}
+              </button>
               {errors.createPassword && (
                 <p className="text-red-500 text-sm mt-1">
                   {errors.createPassword}
@@ -268,30 +270,50 @@ const Forgotpass = () => {
                   </p>
                 </div>
                 {/* Length Validation */}
-               <div className="flex items-center">
-                 {createPassword.length >= 8 ? <FaCheck className="mr-2" /> : <ImCross className="mr-2 text-red-500" />}
-                 <p>Password must be at least 8 characters long</p>
-               </div>
-             
-               {/* Uppercase Letter Validation */}
-               <div className="flex items-center">
-                 {/[A-Z]/.test(createPassword) ? <FaCheck className="mr-2" /> : <ImCross className="mr-2 text-red-500" />}
-                 <p>Contain both uppercase and lowercase alphabetic character(e.g.A-Z,a-z);
-                 </p>
-               </div>
-             
-               {/* Number Validation */}
-               <div className="flex items-center">
-                 {/\d/.test(createPassword) ? <FaCheck className="mr-2" /> : <ImCross className="mr-2 text-red-500" />}
-                 <p>Have ar least one  numberical character(e.g.0-9)</p>
-               </div>
-             
-               {/* Symbol Validation */}
-               <div className="flex items-center">
-                 {/[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? <FaCheck className="mr-2" /> : <ImCross className="mr-2 text-red-00" />}
-                 <p>Have at least one special character(e.g.~!@#$%^&*()_-+=)-it should be mandatory field</p>
-               </div>
+                <div className="flex items-center">
+                  {createPassword.length >= 8 ? (
+                    <FaCheck className="mr-2" />
+                  ) : (
+                    <ImCross className="mr-2 text-red-500" />
+                  )}
+                  <p>Password must be at least 8 characters long</p>
+                </div>
 
+                {/* Uppercase Letter Validation */}
+                <div className="flex items-center">
+                  {/[A-Z]/.test(createPassword) ? (
+                    <FaCheck className="mr-2" />
+                  ) : (
+                    <ImCross className="mr-2 text-red-500" />
+                  )}
+                  <p>
+                    Contain both uppercase and lowercase alphabetic
+                    character(e.g.A-Z,a-z);
+                  </p>
+                </div>
+
+                {/* Number Validation */}
+                <div className="flex items-center">
+                  {/\d/.test(createPassword) ? (
+                    <FaCheck className="mr-2" />
+                  ) : (
+                    <ImCross className="mr-2 text-red-500" />
+                  )}
+                  <p>Have at least one numerical character(e.g.0-9)</p>
+                </div>
+
+                {/* Symbol Validation */}
+                <div className="flex items-center">
+                  {/[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
+                    <FaCheck className="mr-2" />
+                  ) : (
+                    <ImCross className="mr-2 text-red-00" />
+                  )}
+                  <p>
+                    Have at least one special character(e.g.~!@#$%^&*()_-+=)-it
+                    should be mandatory field
+                  </p>
+                </div>
               </span>
             )}
           </div>
@@ -304,20 +326,26 @@ const Forgotpass = () => {
             <div className="relative">
               <input
                 // type={showConfirmPassword ? "text" : "password"}
-               type="text"  
+                type="text"
                 placeholder="Confirm your new password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 maxLength={8}
                 className="mt-1 w-[82%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
-                style={{WebkitTextSecurity:showConfirmPassword ? "none":"disc",}}
-                onPaste={(e)=>{
-                  e.preventDefault();   //in that pasting into confirm password field 
+                style={{
+                  WebkitTextSecurity: showConfirmPassword ? "none" : "disc",
+                }}
+                onPaste={(e) => {
+                  e.preventDefault(); //in that pasting into confirm password field
                 }}
               />
 
-              <button type="button" onClick={togglePassword} className="absolute right-24 top-[17px] transform-translate-y/2 text-gray-600">
-              {showConfirmPassword ? <FaEyeSlash/> :<FaEye/>}
+              <button
+                type="button"
+                onClick={togglePassword}
+                className="absolute right-24 top-[17px] transform-translate-y/2 text-gray-600"
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
               {errors.confirmPassword && (
                 <p className="text-red-500 text-sm mt-1">
@@ -330,19 +358,19 @@ const Forgotpass = () => {
           <div className="flex justify-center mt-4">
             <button
               type="submit"
-              className="bg-green-500 text-white py-2 px-4 w-[90%] rounded-lg hover:bg-green-400 focus:outline-none leading-7 "
+              className="bg-green-500 text-white py-2 px-4 w-[83%] ml-[-80px] rounded-lg hover:bg-green-400 focus:outline-none leading-7 "
             >
               Reset
             </button>
           </div>
           <div className="flex justify-center mt-4">
-                <p>Back To<button
-                  className="text-green-500 texpy-2 px-4 rounded-lg focus:outline-none underline"
-                >
-                  <Link to='/login'>Login</Link> 
-                </button>
-                </p>
-              </div>
+            <p>
+              Back To
+              <button className="text-green-500 texpy-2 px-4 rounded-lg focus:outline-none underline">
+                <Link to="/login">Login</Link>
+              </button>
+            </p>
+          </div>
         </form>
 
         {/* Success Popup */}

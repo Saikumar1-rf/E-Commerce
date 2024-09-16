@@ -41,7 +41,7 @@ const RegisterForm = () => {
   // -----------Password Visibility---------------------
   // const [createPassword, setCreatePassword] = useState("");
   const [showCreatePassword, setShowCreatePassword] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState(""); // Fixed space issue
+  // const [confirmPassword, setConfirmPassword] = useState("");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     // Toggle password visibility

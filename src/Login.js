@@ -93,9 +93,13 @@ const Login = () => {
           <div className="mb-4 relative">
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
             <input 
-              type={showPassword ? 'text' : 'password'}
+              // type={showPassword ? 'text' : 'password'}
+              type='text'
               id="password"
               value={password}
+              style={{
+                WebkitTextSecurity:showPassword ? "none":"disc",
+              }}
               onChange={(e) => setPassword(e.target.value)}
               required
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm ${passwordError ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 pr-10`}
