@@ -144,8 +144,8 @@ const Forgotpass = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="containers bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+    <div className="relative flex items-center justify-center min-h-screen bg-gray-100">
+      <div className=" bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h1 className="text-3xl font-bold text-center mb-6 text-green-500">
           Forgot Password
         </h1>
@@ -227,7 +227,7 @@ const Forgotpass = () => {
                 value={createPassword}
                 onChange={(e) => setCreatePassword(e.target.value)}
                 maxLength={8}
-                className="mt-1 w-[83%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
                 style={{
                   WebkitTextSecurity: showCreatePassword ? "none" : "disc",
                   // "disc" hides text with dots (like a password) without using "password" type
@@ -238,7 +238,7 @@ const Forgotpass = () => {
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute right-24 top-[25px] transform -translate-y-1/2 text-gray-600"
+                className="absolute right-5 top-[25px] transform -translate-y-1/2 text-gray-600"
               >
                 {showCreatePassword ? <FaEyeSlash /> : <FaEye />}
               </button>
@@ -332,7 +332,7 @@ const Forgotpass = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 maxLength={8}
-                className="mt-1 w-[82%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
+                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
                 style={{
                   WebkitTextSecurity: showConfirmPassword ? "none" : "disc",
                 }}
@@ -344,7 +344,7 @@ const Forgotpass = () => {
               <button
                 type="button"
                 onClick={togglePassword}
-                className="absolute right-24 top-[17px] transform-translate-y/2 text-gray-600"
+                className="absolute right-5 top-[17px] transform-translate-y/2 text-gray-600"
               >
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
@@ -359,7 +359,7 @@ const Forgotpass = () => {
           <div className="flex justify-center mt-4">
             <button
               type="submit"
-              className="bg-green-500 text-white py-2 px-4 w-[83%] ml-[-80px] rounded-lg hover:bg-green-400 focus:outline-none leading-7 "
+              className="bg-green-500 text-white py-2 px-4 w-[100%] ml-[-2px] rounded-lg hover:bg-green-400 focus:outline-none leading-7 "
             >
               Reset
             </button>
