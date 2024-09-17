@@ -53,7 +53,6 @@ const Forgotpass = () => {
     const emailRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z][a-zA-Z.-]*\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email) && !/\s/.test(email); // Ensure no spaces are present
   };
-  
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(phone);
