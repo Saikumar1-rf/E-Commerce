@@ -63,6 +63,7 @@ const RegisterForm = () => {
 
     if(name === 'email') {
       newValue = value.replace(/\s+/g, ''); 
+      newValue =newValue.toLowerCase();
     }
 
     setFormData({
@@ -155,6 +156,7 @@ const RegisterForm = () => {
 
     // Validate Email
     const emailRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|outlook\.com)$/;
+    // const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|net|org)$/; 
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!emailRegex.test(formData.email)) {
@@ -263,7 +265,7 @@ const RegisterForm = () => {
            maxLength={30}
             value={formData.email}
             onChange={handleChange}
-            onInput={handleInput}
+            // onInput={handleInput}
             placeholder='Enter Your Mail Id'
             className={`w-full px-6 py-2 border border-gray-500 outline-none rounded-md ${errors.email ? 'border-red-500' : ''}`}
           />

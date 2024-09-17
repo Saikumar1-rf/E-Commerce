@@ -41,13 +41,19 @@ const Forgotpass = () => {
     return () => clearInterval(countdown);
   }, [otp, timer]);
 
-  const validateEmail = (email) => {
-    email = email.toLowerCase();
+  // const validateEmail = (email) => {
+  //   email = email.toLowerCase();
     // const emailRegex = /^[a-z]+[^\s@]*@(gmail\.com|yahoo\.com|outlook\.com)$/;
-    const emailRegex=/^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|outlook\.com)$/;
-    return emailRegex.test(email);
+    // const emailRegex=/^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|outlook\.com)$/;
+    // const emailRegex=/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  //   const emailRegex=/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  //   return emailRegex.test(email);
+  // };
+  const validateEmail = (email) => {
+    const emailRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z][a-zA-Z.-]*\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email) && !/\s/.test(email); // Ensure no spaces are present
   };
-
+  
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(phone);
@@ -86,6 +92,12 @@ const Forgotpass = () => {
   // const handleClick = () => {
   //   navigate("/SuccessPage");
   // };
+
+  // const handleKeyDown=(e)=>{
+  //   if(e.key === '  '){
+  //     e.preventDefault();
+  //   }
+  // }
 
   const handleVerify = () => {
     if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
@@ -166,6 +178,8 @@ const Forgotpass = () => {
                 // onChange={(e) => setInputValue(e.target.value)}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
                 required
+                // autoCapitalize="off" // This turns off capitalization
+                // autoCorrect="off" // Optionally turn off auto-correct
               />
               <button
                 type="button"
