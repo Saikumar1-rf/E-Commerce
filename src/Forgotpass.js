@@ -43,7 +43,8 @@ const Forgotpass = () => {
 
   const validateEmail = (email) => {
     email = email.toLowerCase();
-    const emailRegex = /^[a-z]+[^\s@]*@(gmail\.com|yahoo\.com|outlook\.com)$/;
+    // const emailRegex = /^[a-z]+[^\s@]*@(gmail\.com|yahoo\.com|outlook\.com)$/;
+    const emailRegex=/^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|outlook\.com)$/;
     return emailRegex.test(email);
   };
 
