@@ -99,6 +99,7 @@ const Login = () => {
               type='text'
               id="password"
               value={password}
+              maxLength={8}
               style={{
                 WebkitTextSecurity:showPassword ? "none":"disc",
               }}
