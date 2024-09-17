@@ -56,7 +56,8 @@ const RegisterForm = () => {
 
 
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
-
+ 
+  
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     let newValue = value.trimStart();
@@ -91,7 +92,7 @@ const RegisterForm = () => {
       setPasswordStrength('weak');
     }
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     setErrors({});
@@ -115,12 +116,13 @@ const RegisterForm = () => {
 
   };
 
-  const handleInput=(e)=>{
-    const {name,value}=e.target;
-    if(name === 'email'){
-      e.target.value=value.replace(/\s+/g, '');
+    const handleInput=(e)=>{
+      const {name,value}=e.target;
+      if(name === 'email'){
+        e.target.value=value.replace(/\s+/g, '');
+      }
     }
-  }
+
 
     // Validate Full Name
     const handleNameChar = (e) => {
@@ -155,8 +157,7 @@ const RegisterForm = () => {
   }
 
     // Validate Email
-    const emailRegex = /^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|outlook\.com)$/;
-    // const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|net|org)$/; 
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!emailRegex.test(formData.email)) {
@@ -265,7 +266,7 @@ const RegisterForm = () => {
            maxLength={30}
             value={formData.email}
             onChange={handleChange}
-            // onInput={handleInput}
+            onInput={handleInput}
             placeholder='Enter Your Mail Id'
             className={`w-full px-6 py-2 border border-gray-500 outline-none rounded-md ${errors.email ? 'border-red-500' : ''}`}
           />
