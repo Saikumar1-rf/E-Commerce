@@ -114,6 +114,13 @@ const RegisterForm = () => {
 
   };
 
+  const handleInput=(e)=>{
+    const {name,value}=e.target;
+    if(name === 'email'){
+      e.target.value=value.replace(/\s+/g, '');
+    }
+  }
+
     // Validate Full Name
     const handleNameChar = (e) => {
         const key = e.key;
@@ -256,6 +263,7 @@ const RegisterForm = () => {
            maxLength={30}
             value={formData.email}
             onChange={handleChange}
+            onInput={handleInput}
             placeholder='Enter Your Mail Id'
             className={`w-full px-6 py-2 border border-gray-500 outline-none rounded-md ${errors.email ? 'border-red-500' : ''}`}
           />
