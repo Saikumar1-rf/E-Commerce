@@ -11,13 +11,15 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   
   const validateEmail = (input) => {
-    const emailPattern = /^[a-z][a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+    // const emailPattern = /^[a-z][a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i;
+    const emailPattern=/^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|outlook\.com)$/;
     return emailPattern.test(input);
   };
 
-  const validatePhoneNumber = (input) => {
-    const phonePattern = /^\d{10}$/;
-    return phonePattern.test(input);
+  const validatePhoneNumber = (phone) => {
+    // const phonePattern = /^\d{10}$/;
+    const phonePattern = /^[6-9]\d{9}$/;
+    return phonePattern.test(phone);
   };
 
   const validatePassword = (input) => {
@@ -81,7 +83,7 @@ const Login = () => {
               type="text"
               id="email"
               value={email}
-              maxLength={30}
+              maxLength={validatePhoneNumber(email) ? 10 : 30}
               onChange={(e) => setEmail(e.target.value)}
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm ${emailError ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               aria-invalid={!!emailError}
