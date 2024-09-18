@@ -159,8 +159,7 @@ const RegisterForm = () => {
     // Validate Email
     // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|edu|org|gov|mil|in|co|us|info|io|biz)$/;
-
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z.-]+\.(com|net|edu|org|gov|mil|in|co|us|info|io|biz)$/;
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!emailRegex.test(formData.email)) {
