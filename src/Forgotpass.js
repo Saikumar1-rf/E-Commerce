@@ -264,9 +264,9 @@ const Forgotpass = () => {
                   /[A-Z]/.test(createPassword) &&
                   /\d/.test(createPassword) &&
                   /[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
-                    <FaCheck className="mr-2" />
+                    <FaCheck className="mr-2 h-4 w-4" />
                   ) : (
-                    <ImCross className="mr-2 text-black" />
+                    <ImCross className="mr-2 text-red-500" />
                   )}
                   <p>
                     Password strength:
@@ -281,9 +281,9 @@ const Forgotpass = () => {
                 {/* Length Validation */}
                 <div className="flex items-center">
                   {createPassword.length >= 8 ? (
-                    <FaCheck className="mr-2" />
+                    <FaCheck className="mr-2 h-4 w-4" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500" />
+                    <ImCross className="mr-2 text-red-500 h-4 w-4" />
                   )}
                   <p>Password must be at least 8 characters long</p>
                 </div>
@@ -291,9 +291,9 @@ const Forgotpass = () => {
                 {/* Uppercase Letter Validation */}
                 <div className="flex items-center">
                   {/[A-Z]/.test(createPassword) ? (
-                    <FaCheck className="mr-2" />
+                    <FaCheck className="mr-2 h-5 w-5" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500" />
+                    <ImCross className="mr-2 text-red-500 h-5 w-5" />
                   )}
                   <p>
                     Contain both uppercase and lowercase alphabetic
@@ -302,11 +302,11 @@ const Forgotpass = () => {
                 </div>
 
                 {/* Number Validation */}
-                <div className="flex items-center">
+                <div className="flex items-center ">
                   {/\d/.test(createPassword) ? (
-                    <FaCheck className="mr-2" />
+                    <FaCheck className="mr-2 h-4 w-4" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500" />
+                    <ImCross className="mr-2 text-red-500 h-4 w-4" />
                   )}
                   <p>Have at least one numerical character(e.g.0-9)</p>
                 </div>
@@ -314,9 +314,9 @@ const Forgotpass = () => {
                 {/* Symbol Validation */}
                 <div className="flex items-center">
                   {/[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
-                    <FaCheck className="mr-2" />
+                    <FaCheck className="mr-2 h-6 w-6 " />
                   ) : (
-                    <ImCross className="mr-2 text-red-00" />
+                    <ImCross className="mr-2 text-red-500 h-6 w-6" />
                   )}
                   <p>
                     Have at least one special character(e.g.~!@#$%^&*()_-+=)-it
