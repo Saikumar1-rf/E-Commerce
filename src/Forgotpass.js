@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { ImCross } from "react-icons/im";
 import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
 const Forgotpass = () => {
   const [inputValue, setInputValue] = useState("");
   const [createPassword, setCreatePassword] = useState("");
