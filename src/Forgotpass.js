@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ImCross } from "react-icons/im";
 import { FaCheck, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link } from "react-router-dom";
+
 const Forgotpass = () => {
   const [inputValue, setInputValue] = useState("");
   const [createPassword, setCreatePassword] = useState("");
@@ -14,15 +15,14 @@ const Forgotpass = () => {
   const [canResendOtp, setCanResendOtp] = useState(false); // Controls Resend OTP button
   const [otpValue, setOtpValue] = useState(""); // Value of OTP input
   const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Success popup visibility
+  const [isVerified, setIsVerified] = useState(false); // Tracks verification status
 
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowCreatePassword(!showCreatePassword);
-    // setShowConfirmPassword(!showConfirmPassword);
   };
 
   const togglePassword = () => {
-    // setShowCreatePassword(!showCreatePassword);
     setShowConfirmPassword(!showConfirmPassword);
   };
 
@@ -40,26 +40,21 @@ const Forgotpass = () => {
     return () => clearInterval(countdown);
   }, [otp, timer]);
 
-  // const validateEmail = (email) => {
-  //   email = email.toLowerCase();
-    // const emailRegex = /^[a-z]+[^\s@]*@(gmail\.com|yahoo\.com|outlook\.com)$/;
-    // const emailRegex=/^[a-zA-Z0-9]+[a-zA-Z0-9._%+-]*[a-zA-Z0-9]+@(gmail\.com|yahoo\.com|outlook\.com)$/;
-    // const emailRegex=/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  //   const emailRegex=/^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-  //   return emailRegex.test(email);
-  // };
   const validateEmail = (email) => {
-    const emailRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z][a-zA-Z.-]*\.[a-zA-Z]{2,}$/;
+      //  const emailRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z][a-zA-Z.-]*\.[a-zA-Z]{2,}$/;
+  const emailRegex= /^[a-z0-9._%+-]+@[a-z.-]+\.(com|net|org|in|edu|gov|mil|co|us|info|)$/;
     return emailRegex.test(email) && !/\s/.test(email); // Ensure no spaces are present
   };
+
   const validatePhoneNumber = (phone) => {
     const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(phone);
   };
 
   const handleEmailChange = (e) => {
-    const value = e.target.value.replace(/\s+/g, "").toLowerCase();
-    setInputValue(value);
+    const value=e.target.value;
+    const formattedValue = value.replace(/\s+/g, "").replace(/[A-Z]/g,'');
+    setInputValue(formattedValue);
   };
 
   const validatePasswordStrength = (password) => {
@@ -86,22 +81,16 @@ const Forgotpass = () => {
     return passwordErrors;
   };
 
-  // Navigate to SuccessPage
-  // const handleClick = () => {
-  //   navigate("/SuccessPage");
-  // };
-
-  // const handleKeyDown=(e)=>{
-  //   if(e.key === '  '){
-  //     e.preventDefault();
-  //   }
-  // }
-
   const handleVerify = () => {
+    let validationErrors = {};
+
     if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
-      setErrors({
-        email: "Please enter a valid email address or a 10-digit phone number",
-      });
+      validationErrors.email =
+        "Please enter a valid email address or a 10-digit phone number";
+    }
+
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
     } else {
       setErrors({});
       console.log("Verified: ", inputValue);
@@ -124,11 +113,12 @@ const Forgotpass = () => {
       setOtpValue(value);
     }
   };
+
   const determineMaxLength = () => {
     if (validatePhoneNumber(inputValue)) {
-      return 10; //phone numbers
+      return 10; // phone numbers
     } else {
-      return 30; //email Address
+      return 30; // email Address
     }
   };
 
@@ -136,12 +126,15 @@ const Forgotpass = () => {
     e.preventDefault();
     const passwordErrors = validatePasswords();
 
-    if (Object.keys(passwordErrors).length > 0) {
+     if (!isVerified) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        verification: "Please verify your email or phone number first",
+      }));
+    } else if (Object.keys(passwordErrors).length > 0) {
       setErrors(passwordErrors);
-    } else if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
-      setErrors({
-        email: "Please enter a valid email address or a 10-digit phone number",
-      });
+    } else if (otp && otpValue.length !== 6) {
+      setErrors({ otp: "OTP is required and must be 6 digits" });
     } else {
       setErrors({});
       // Show success popup
@@ -155,7 +148,7 @@ const Forgotpass = () => {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gray-100">
-      <div className=" bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
         <h1 className="text-3xl font-bold text-center mb-6 text-green-500">
           Forgot Password
         </h1>
@@ -170,26 +163,28 @@ const Forgotpass = () => {
                 type="text"
                 placeholder="Email id or number"
                 value={inputValue}
-                maxLength={determineMaxLength(30)}
-                //  or maxLength={determineMaxLength(30)}  // maxLength={validatePhoneNumber(inputValue) ? 10 : 30} {/* Max length for phone numbers and emails */}
+                maxLength={determineMaxLength()}
+                // maxLength={validatePhoneNumber(email)
+
+                //   ? 10 : 30} 
                 onChange={handleEmailChange}
-                // onChange={(e) => setInputValue(e.target.value)}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
                 required
-                // autoCapitalize="off" // This turns off capitalization
-                // autoCorrect="off" // Optionally turn off auto-correct
               />
               <button
                 type="button"
                 onClick={handleVerify}
                 className="bg-green-500 text-white py-2 px-4 rounded-2xl h-[40px] w-[70px] hover:bg-green-400 focus:outline-none"
-                disabled={otp && !canResendOtp} // Disable during OTP verification
+                disabled={!validateEmail(inputValue) && !validatePhoneNumber(inputValue)}
               >
                 Verify
               </button>
             </div>
             {errors.email && (
               <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            )}
+             {errors.verification && (
+              <p className="text-red-500 text-sm mt-1">{errors.verification}</p>
             )}
           </div>
 
@@ -206,8 +201,12 @@ const Forgotpass = () => {
                   onChange={handleOtpChange}
                   maxLength="6"
                   className="w-[50%] h-[50px] outline-none rounded-xl bg-green-500 text-white text-center"
+                  required
                 />
               </div>
+              {errors.otp && (
+                <p className="text-red-500 text-sm mt-1">{errors.otp}</p>
+              )}
               {/* Timer display */}
               {timer > 0 ? (
                 <p className="text-sm text-green-500 mt-2">
@@ -232,35 +231,32 @@ const Forgotpass = () => {
               Create Password
             </label>
             <div className="relative">
-              {/* Password Input without type="password" */}
               <input
-                type="text" // Always type="text", removing the "password" type entirely
+                type="text"
                 placeholder="Create a new password"
                 value={createPassword}
                 onChange={(e) => setCreatePassword(e.target.value)}
                 maxLength={8}
-                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-indigo-500"
+                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
                 style={{
                   WebkitTextSecurity: showCreatePassword ? "none" : "disc",
-                  // "disc" hides text with dots (like a password) without using "password" type
                 }}
               />
-
-              {/* Button for toggling password visibility */}
               <button
                 type="button"
                 onClick={togglePasswordVisibility}
-                className="absolute right-5 top-[25px] transform -translate-y-1/2 text-gray-600"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
               >
                 {showCreatePassword ? <FaEyeSlash /> : <FaEye />}
               </button>
-              {errors.createPassword && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.createPassword}
-                </p>
-              )}
             </div>
-            {createPassword && (
+            {errors.createPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.createPassword}
+              </p>
+            )}
+          </div>
+          {createPassword && (
               <span className="text-green-500 space-y-2">
                 {/* Password Strength */}
                 <div className="flex items-center">
@@ -270,7 +266,7 @@ const Forgotpass = () => {
                   /[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
                     <FaCheck className="mr-2" />
                   ) : (
-                    <ImCross className="mr-2 text-gray-300" />
+                    <ImCross className="mr-2 text-black" />
                   )}
                   <p>
                     Password strength:
@@ -329,7 +325,6 @@ const Forgotpass = () => {
                 </div>
               </span>
             )}
-          </div>
 
           {/* Confirm Password Input */}
           <div>
@@ -338,9 +333,8 @@ const Forgotpass = () => {
             </label>
             <div className="relative">
               <input
-                // type={showConfirmPassword ? "text" : "password"}
                 type="text"
-                placeholder="Confirm your new password"
+                placeholder="Confirm password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 maxLength={8}
@@ -352,66 +346,46 @@ const Forgotpass = () => {
                   e.preventDefault(); //in that pasting into confirm password field
                 }}
               />
-
               <button
                 type="button"
                 onClick={togglePassword}
-                className="absolute right-5 top-[17px] transform-translate-y/2 text-gray-600"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500"
               >
                 {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
-              {errors.confirmPassword && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.confirmPassword}
-                </p>
-              )}
             </div>
+            {errors.confirmPassword && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.confirmPassword}
+              </p>
+            )}
           </div>
 
-          <div className="flex justify-center mt-4">
-            <button
-              type="submit"
-              className="bg-green-500 text-white py-2 px-4 w-[100%] ml-[-2px] rounded-lg hover:bg-green-400 focus:outline-none leading-7 "
-            >
-              Reset
-            </button>
-          </div>
-          <div className="flex justify-center mt-4">
-            <p>
-              Back To
-              <button className="text-green-500 texpy-2 px-4 rounded-lg focus:outline-none underline">
-                <Link to="/login">Login</Link>
-              </button>
-            </p>
-          </div>
+          {/* Submit button */}
+          <button
+            type="submit"
+            className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 focus:outline-none"
+          >
+            Submit
+          </button>
         </form>
 
         {/* Success Popup */}
         {showSuccessPopup && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-              <div className="flex justify-end">
-                <button
-                  onClick={handleClosePopup}
-                  className="text-gray-500 hover:text-gray-800"
-                >
-                  <ImCross />
-                </button>
-              </div>
-              <h2 className="text-lg font-bold text-center text-green-500">
-                Success
-              </h2>
-              <p className="text-center mt-4">
-                Your password has been successfully reset.
-              </p>
-              {/* <div className="flex justify-center mt-4">
-                <p>Back To<button
-                  className="text-green-500 texpy-2 px-4 rounded-lg focus:outline-none"
-                >
-                  Login
-                </button>
-                </p>
-              </div> */}
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+              <ImCross
+                className="absolute top-2 right-2 cursor-pointer"
+                onClick={handleClosePopup}
+              />
+              <h2 className="text-3xl font-bold text-green-500 mb-4">Success!</h2>
+              <p className="text-lg">Your password has been successfully reset.</p>
+              <button
+                className="mt-4 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 focus:outline-none"
+                onClick={handleClosePopup}
+              >
+                Close
+              </button>
             </div>
           </div>
         )}

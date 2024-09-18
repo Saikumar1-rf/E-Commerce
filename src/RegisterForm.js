@@ -34,7 +34,7 @@ const RegisterForm = () => {
       hasUpper: /[A-Z]/.test(password),
       hasNumber: /[0-9]/.test(password),
       hasSpecialChar: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-      minLength: password.length >= 6,
+      minLength: password.length >= 8,
     });
   };
 
@@ -157,12 +157,17 @@ const RegisterForm = () => {
   }
 
     // Validate Email
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|net|edu|org|gov|mil|in|co|us|info|io|biz)$/;
+
     if (!formData.email) {
       newErrors.email = 'Email is required';
     } else if (!emailRegex.test(formData.email)) {
       newErrors.email = 'Invalid email format';
     }
+
+
 
     // Validate Password
     if (!formData.password) {
@@ -251,7 +256,7 @@ const RegisterForm = () => {
           )}
         </div>
 
-        {/* {/ Email /} */}
+          {/* {/ email /} */}
         <div className='mb-4 relative'>
           <label className='block mb-2 text-sm font-medium text-gray-700 float-start'>
             Email ID
@@ -392,7 +397,7 @@ const RegisterForm = () => {
         </div>
         
 
-        {/* {/ Confirm Password /} */}
+        {/* {/ Confirm Password  /} */}
 
         <div className='mb-4 relative'>
           <label className='block mb-2 text-sm font-medium text-gray-700 float-start'>
@@ -463,7 +468,7 @@ const RegisterForm = () => {
         {/* {/ Conditional Fields for Vendor /} */}
         {formData.userType === 'vendor' && (
           <>
-          {/* {/ ---------shop name-------------- /} */}
+                {/* {/ ---------shop name-------------- /} */}
             <div className='mb-4'>
               <label className='block mb-2 text-sm float-start font-medium text-gray-700'>
                 Shop Name
@@ -483,7 +488,7 @@ const RegisterForm = () => {
                 <span className='text-red-500 text-sm'>{errors.shopName}</span>
               )}
             </div>
-            {/* {/ ---------shop Area--------------  /} */}
+            {/* {/ ---------shop Area-------------- /} */}
             <div className='mb-4'>
               <label className='block mb-2 text-sm float-start font-medium text-gray-700'>
                 Area
@@ -517,7 +522,7 @@ const RegisterForm = () => {
               />
     
             </div>
-            {/* {/ ---------vendor number--------------  /} */}
+            {/* {/ ---------vendor number-------------- /} */}
             <div className='mb-4'>
               <label className='block mb-2 text-sm float-start font-medium text-gray-700'>
                 Vendor Phone Number
@@ -546,7 +551,7 @@ const RegisterForm = () => {
           </>
         )}
 
-        {/* {/ Terms and Conditions /} */}
+             {/* {/ Terms and Conditions  /} */}
         <div className='mb-4 float-start'>
           <label className='block items-center'>
             <input
@@ -575,7 +580,7 @@ const RegisterForm = () => {
           Register
         </button>
 
-        {/* {/ -----------Footer------------- /} */}
+        {/* {/ -----------Footer-------------  /} */}
 
         <div className='text-center mt-4 font-semibold'>
           Already Have An Account? <Link to='/login'  className='text-green-600 hover:underline ml-1'>Login</Link>
@@ -583,7 +588,7 @@ const RegisterForm = () => {
 
       </form>
 
-     {/* {/ Success Modal /}. */}
+    {/* {/ ----------Success Modal----------- /} */}
      {isSuccessModalVisible && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg text-center">
