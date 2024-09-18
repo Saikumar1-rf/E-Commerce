@@ -366,8 +366,17 @@ const Forgotpass = () => {
             type="submit"
             className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 focus:outline-none"
           >
-            Submit
+            Reset
           </button>
+          <div className="flex justify-center mt-4">
+                <p>Back To<button
+                  className="text-green-500 texpy-2 px-4 rounded-lg focus:outline-none underline"
+                >
+                 <Link to='/login'>Login</Link>
+                </button>
+                </p>
+              </div>
+
         </form>
 
         {/* Success Popup */}
