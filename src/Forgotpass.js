@@ -17,6 +17,8 @@ const Forgotpass = () => {
   const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Success popup visibility
   const [isVerified, setIsVerified] = useState(false); // Tracks verification status
 
+
+
   // Toggle password visibility
   const togglePasswordVisibility = () => {
     setShowCreatePassword(!showCreatePassword);
@@ -41,8 +43,9 @@ const Forgotpass = () => {
   }, [otp, timer]);
 
   const validateEmail = (email) => {
-      //  const emailRegex = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z][a-zA-Z.-]*\.[a-zA-Z]{2,}$/;
-  const emailRegex= /^[a-z0-9._%+-]+@[a-z.-]+\.(com|net|org|in|edu|gov|mil|co|us|info|)$/;
+       const emailRegex = /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z]+\.[a-zA-Z]+$/;
+  // const emailRegex= /^[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|net|org|in|edu|gov|mil|co|us|info)$/;
+  // const emailRegex=/^[a-z0-9._%+-]+@[a-z.-]+\.(com|net|org|in|edu|gov|mil|co|us|info|)$/ ;
     return emailRegex.test(email) && !/\s/.test(email); // Ensure no spaces are present
   };
 
@@ -51,19 +54,17 @@ const Forgotpass = () => {
     return phoneRegex.test(phone);
   };
 
+  const phoneNumber="9876543210";
+  if(validatePhoneNumber(phoneNumber)){
+    console.log("valid phone number");
+  }else{
+    console.log("Invalid phone number");
+  }
+
   const handleEmailChange = (e) => {
     const value=e.target.value;
     const formattedValue = value.replace(/\s+/g, "").replace(/[A-Z]/g,'');
     setInputValue(formattedValue);
-  };
-
-  const validatePasswordStrength = (password) => {
-    return {
-      length: password.length >= 8,
-      uppercase: /[A-Z]/.test(password),
-      number: /\d/.test(password),
-      Symbol: /[!@#$%^&*(),.?":{}|<>]/.test(password),
-    };
   };
 
   const validatePasswords = () => {
@@ -84,10 +85,15 @@ const Forgotpass = () => {
   const handleVerify = () => {
     let validationErrors = {};
 
-    if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
+    if (!inputValue) {
+      validationErrors.email = "Input cannot be empty.";
+    } else if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
       validationErrors.email =
-        "Please enter a valid email address or a 10-digit phone number";
+        "Please enter a valid email address or a 10-digit phone number.";
+    } else if (validateEmail(inputValue) && !validateEmail(inputValue)) {
+      validationErrors.email = "Invalid email format. Please check and try again.";
     }
+
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -97,6 +103,8 @@ const Forgotpass = () => {
       setOtp(true); // Simulate OTP being sent and display OTP fields
       setTimer(60); // Start the 60-second timer
       setCanResendOtp(false); // Disable resend option until timer runs out
+      setIsVerified(true);
+
     }
   };
 
@@ -114,6 +122,20 @@ const Forgotpass = () => {
     }
   };
 
+  const handleOtpVerify = () => {
+    if (otpValue.length !== 6) {
+      setErrors({ otp: "OTP is required and must be 6 digits" });
+    } else {
+      setErrors({});
+      console.log("OTP Verified: ", otpValue);
+      // Simulate successful OTP verification
+      setOtp(false); //hide otp input and resend button
+      setShowSuccessPopup(true);
+      // setShowAlert(true);
+    }
+  };
+
+
   const determineMaxLength = () => {
     if (validatePhoneNumber(inputValue)) {
       return 10; // phone numbers
@@ -125,6 +147,24 @@ const Forgotpass = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const passwordErrors = validatePasswords();
+
+    const emailErrors = {};
+
+    // Check if the inputValue is empty
+    if (!inputValue) {
+        emailErrors.email = "Email or phone number is required.";
+    } else if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
+        emailErrors.email = "Please enter a valid email address or a 10-digit phone number.";
+    }
+
+    // If there are email errors, set them in the errors state
+    if (Object.keys(emailErrors).length > 0) {
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            ...emailErrors,
+        }));
+        return; // Exit early if there are errors
+    }
 
      if (!isVerified) {
       setErrors((prevErrors) => ({
@@ -148,8 +188,8 @@ const Forgotpass = () => {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-lg">
-        <h1 className="text-3xl font-bold text-center mb-6 text-green-500">
+  <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-6 lg:max-w-lg">
+    <h1 className="text-3xl font-bold text-center mb-6 text-green-500">
           Forgot Password
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -164,12 +204,16 @@ const Forgotpass = () => {
                 placeholder="Email id or number"
                 value={inputValue}
                 maxLength={determineMaxLength()}
-                // maxLength={validatePhoneNumber(email)
-
-                //   ? 10 : 30} 
+                // maxLength={validatePhoneNumber(email)  ? 10 : 30} 
                 onChange={handleEmailChange}
                 className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
-                required
+                // onInput={(e)=>{
+                //   e.target.value=e.target.value.replace(/[^0-9]/g,'');
+                //   if(e.target.value && !/^[6-9]/.test(e.target.value)){
+                //     e.target.value='';
+                //   }
+                // }}
+                // required
               />
               <button
                 type="button"
@@ -203,6 +247,13 @@ const Forgotpass = () => {
                   className="w-[50%] h-[50px] outline-none rounded-xl bg-green-500 text-white text-center"
                   required
                 />
+                <button
+                  type="button"
+                  onClick={handleOtpVerify}
+                  className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 focus:outline-none"
+                >
+                  Verify OTP
+                </button>
               </div>
               {errors.otp && (
                 <p className="text-red-500 text-sm mt-1">{errors.otp}</p>
@@ -257,16 +308,16 @@ const Forgotpass = () => {
             )}
           </div>
           {createPassword && (
-              <span className="text-green-500 space-y-2">
+              <span className="space-y-2">
                 {/* Password Strength */}
                 <div className="flex items-center">
                   {createPassword.length >= 8 &&
                   /[A-Z]/.test(createPassword) &&
                   /\d/.test(createPassword) &&
                   /[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
-                    <FaCheck className="mr-2 h-4 w-4" />
+                    <FaCheck className=" text-green-500  mr-2 h-4 w-4" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500" />
+                    <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
                   <p>
                     Password strength:
@@ -281,32 +332,31 @@ const Forgotpass = () => {
                 {/* Length Validation */}
                 <div className="flex items-center">
                   {createPassword.length >= 8 ? (
-                    <FaCheck className="mr-2 h-4 w-4" />
+                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500 h-4 w-4" />
+                    <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
-                  <p>Password must be at least 8 characters long</p>
+                  <p>Minimum 8 characters long</p>
                 </div>
 
                 {/* Uppercase Letter Validation */}
                 <div className="flex items-center">
                   {/[A-Z]/.test(createPassword) ? (
-                    <FaCheck className="mr-2 h-5 w-5" />
+                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500 h-5 w-5" />
+                    <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
                   <p>
-                    Contain both uppercase and lowercase alphabetic
-                    character(e.g.A-Z,a-z);
+                    Contain uppercase and lowercase letters(e.g.A-Z,a-z);
                   </p>
                 </div>
 
                 {/* Number Validation */}
                 <div className="flex items-center ">
                   {/\d/.test(createPassword) ? (
-                    <FaCheck className="mr-2 h-4 w-4" />
+                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500 h-4 w-4" />
+                    <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
                   <p>Have at least one numerical character(e.g.0-9)</p>
                 </div>
@@ -314,13 +364,12 @@ const Forgotpass = () => {
                 {/* Symbol Validation */}
                 <div className="flex items-center">
                   {/[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
-                    <FaCheck className="mr-2 h-6 w-6 " />
+                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
                   ) : (
-                    <ImCross className="mr-2 text-red-500 h-6 w-6" />
+                    <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
                   <p>
-                    Have at least one special character(e.g.~!@#$%^&*()_-+=)-it
-                    should be mandatory field
+                    Contains a special character(!@#$%^&*)
                   </p>
                 </div>
               </span>
@@ -376,7 +425,6 @@ const Forgotpass = () => {
                 </button>
                 </p>
               </div>
-
         </form>
 
         {/* Success Popup */}

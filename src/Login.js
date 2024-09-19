@@ -24,7 +24,7 @@ const Login = () => {
 
   // Password validation
   const validatePassword = (input) => {
-    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&?*+#^=])[A-Za-z\d@$!%?&^#*+=]{8,}$/;
     return passwordPattern.test(input);
   };
 
@@ -99,13 +99,23 @@ const Login = () => {
               id="email"
               value={email}
               maxLength={validatePhoneNumber(email)
-
-                ? 10 : 30} // This ensures that no more than 10 characters are allowed for phone number
+ ? 10 : 30} // This ensures that no more than 10 characters are allowed for phone number
               onChange={handleEmailChange}
               className={`mt-1 block w-full px-3 py-2 border rounded-md shadow-sm sm:text-sm ${emailError ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-indigo-500 focus:border-indigo-500`}
               aria-invalid={!!emailError}
               aria-describedby="email-error"
               aria-label="Email or Phone Number"
+              onInput={(e)=> {
+                
+                const inputValue = e.target.value;
+                if (!/^[a-zA-Z0-9@._-]*$/.test(inputValue)) {
+                  e.target.value = inputValue.replace(/[^a-zA-Z0-9@._-]/g, '');
+                }
+                if (validatePhoneNumber(inputValue) && !/^[6-9]/.test(inputValue)) {
+                  e.target.value = '';
+                }
+            
+              }}
             />
             {emailError && <p id="email-error" className="text-red-500 text-sm mt-1">{emailError}</p>}
           </div>
