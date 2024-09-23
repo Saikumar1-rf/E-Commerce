@@ -226,7 +226,7 @@ const RegisterForm = () => {
   return (
 
     <div className='max-w-lg mx-auto mt-10 p-8 bg-white border border-gray-300 rounded-lg'>
-      <h2 className='text-2xl font-bold text-center text-green-600 mb-6'>
+      <h2 className='text-2xl font-bold text-center text-blue-500 mb-6'>
         Register An Account
       </h2>
       <form onSubmit={handleSubmit}>
@@ -352,7 +352,7 @@ const RegisterForm = () => {
             <ul className='list-none'>
               <li className='flex items-center'>
                 {passwordRequirements.hasLower ? (
-                  <FaCheck className='text-green-500 mr-2' />
+                  <FaCheck className='text-blue-500 mr-2' />
                 ) : (
                   <FaTimes className='text-red-500 mr-2' />
                 )}
@@ -360,7 +360,7 @@ const RegisterForm = () => {
               </li>
               <li className='flex items-center'>
                 {passwordRequirements.hasUpper ? (
-                  <FaCheck className='text-green-500 mr-2' />
+                  <FaCheck className='text-blue-500 mr-2' />
                 ) : (
                   <FaTimes className='text-red-500 mr-2' />
                 )}
@@ -368,7 +368,7 @@ const RegisterForm = () => {
               </li>
               <li className='flex items-center'>
                 {passwordRequirements.hasNumber ? (
-                  <FaCheck className='text-green-500 mr-2' />
+                  <FaCheck className='text-blue-500 mr-2' />
                 ) : (
                   <FaTimes className='text-red-500 mr-2' />
                 )}
@@ -376,7 +376,7 @@ const RegisterForm = () => {
               </li>
               <li className='flex items-center'>
                 {passwordRequirements.hasSpecialChar ? (
-                  <FaCheck className='text-green-500 mr-2' />
+                  <FaCheck className='text-blue-500 mr-2' />
                 ) : (
                   <FaTimes className='text-red-500 mr-2' />
                 )}
@@ -384,7 +384,7 @@ const RegisterForm = () => {
               </li>
               <li className='flex items-center'>
                 {passwordRequirements.minLength ? (
-                  <FaCheck className='text-green-500 mr-2' />
+                  <FaCheck className='text-blue-500 mr-2' />
                 ) : (
                   <FaTimes className='text-red-500 mr-2' />
                 )}
@@ -445,7 +445,7 @@ const RegisterForm = () => {
                 value='customer'
                 checked={formData.userType === 'customer'}
                 onChange={handleChange}
-                className='h-4 w-4 text-green-500'
+                className='h-4 w-4 text-blue-500'
               />
               <span className='ml-2 text-gray-700'>I am a Customer</span>
             </label>
@@ -457,7 +457,7 @@ const RegisterForm = () => {
                 value='vendor'
                 checked={formData.userType === 'vendor'}
                 onChange={handleChange}
-                className='form-radio h-4 w-4 text-green-500'
+                className='form-radio h-4 w-4 text-blue-500'
               />
               <span className='ml-2 text-gray-700'>I am a Vendor</span>
             </label>
@@ -558,7 +558,7 @@ const RegisterForm = () => {
               name='agreedToTerms'
               checked={formData.agreedToTerms}
               onChange={handleChange}
-              className='form-checkbox h-4 w-4 text-green-500'
+              className='form-checkbox h-4 w-4 text-blue-500'
             />
             <span className='ml-2  text-gray-700'>
               I agree to the terms and conditions
@@ -574,7 +574,7 @@ const RegisterForm = () => {
         {/* {/ Submit Button /} */}
         <button
           type='submit'
-          className='w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none focus:bg-green-600'
+          className='w-full  text-white py-2 px-4 rounded hover:bg-green-600 focus:outline-none bg-blue-600'
         >
           Register
         </button>
@@ -582,20 +582,19 @@ const RegisterForm = () => {
         {/* {/ -----------Footer-------------  /} */}
 
         <div className='text-center mt-4 font-semibold'>
-          Already Have An Account? <Link to='/login'  className='text-green-600 hover:underline ml-1'>Login</Link>
+          Already Have An Account? <Link to='/login'  className='text-blue-600 hover:underline ml-1'>Login</Link>
         </div>
-
       </form>
 
     {/* {/ ----------Success Modal----------- /} */}
      {isSuccessModalVisible && (
         <div className="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-            <h2 className="text-2xl font-bold text-green-600">Registration Successful!</h2>
+            <h2 className="text-2xl font-bold text-blue-600">Registration Successful!</h2>
             <p className="mt-4">Thank you for registering.</p>
             <button
               onClick={() => setIsSuccessModalVisible(false)}
-              className="mt-6 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
+              className="mt-6  text-white py-2 px-4 rounded bg-blue-500"
             >
               Close
             </button>

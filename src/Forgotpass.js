@@ -16,7 +16,7 @@ const Forgotpass = () => {
   const [otpValue, setOtpValue] = useState(""); // Value of OTP input
   const [showSuccessPopup, setShowSuccessPopup] = useState(false); // Success popup visibility
   const [isVerified, setIsVerified] = useState(false); // Tracks verification status
-
+  const [showMessage,setShowMessage]=useState(false);
 
 
   // Toggle password visibility
@@ -43,23 +43,9 @@ const Forgotpass = () => {
   }, [otp, timer]);
 
   const validateEmail = (email) => {
-       const emailRegex = /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z]+\.[a-zA-Z]+$/;
-  // const emailRegex= /^[a-z0-9._%+-]+@[a-z0-9.-]+\.(com|net|org|in|edu|gov|mil|co|us|info)$/;
-  // const emailRegex=/^[a-z0-9._%+-]+@[a-z.-]+\.(com|net|org|in|edu|gov|mil|co|us|info|)$/ ;
+       const emailRegex = /^[a-zA-Z0-9]+(\.[a-zA-Z0-9]+)*@[a-zA-Z]+\.[a-zA-Z]{2,}(\.com)?$/;
     return emailRegex.test(email) && !/\s/.test(email); // Ensure no spaces are present
   };
-
-  const validatePhoneNumber = (phone) => {
-    const phoneRegex = /^[6-9]\d{9}$/;
-    return phoneRegex.test(phone);
-  };
-
-  const phoneNumber="9876543210";
-  if(validatePhoneNumber(phoneNumber)){
-    console.log("valid phone number");
-  }else{
-    console.log("Invalid phone number");
-  }
 
   const handleEmailChange = (e) => {
     const value=e.target.value;
@@ -87,9 +73,9 @@ const Forgotpass = () => {
 
     if (!inputValue) {
       validationErrors.email = "Input cannot be empty.";
-    } else if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
+    } else if (!validateEmail(inputValue)) {
       validationErrors.email =
-        "Please enter a valid email address or a 10-digit phone number.";
+        "Please enter a valid email address";
     } else if (validateEmail(inputValue) && !validateEmail(inputValue)) {
       validationErrors.email = "Invalid email format. Please check and try again.";
     }
@@ -127,20 +113,12 @@ const Forgotpass = () => {
       setErrors({ otp: "OTP is required and must be 6 digits" });
     } else {
       setErrors({});
-      console.log("OTP Verified: ", otpValue);
+      alert("Successfully verified otp!");//show alert on successfull otp verification
+      // console.log("OTP Verified: ", otpValue);
       // Simulate successful OTP verification
       setOtp(false); //hide otp input and resend button
-      setShowSuccessPopup(true);
-      // setShowAlert(true);
-    }
-  };
-
-
-  const determineMaxLength = () => {
-    if (validatePhoneNumber(inputValue)) {
-      return 10; // phone numbers
-    } else {
-      return 30; // email Address
+      // setShowSuccessPopup(true);
+      setShowMessage(true);
     }
   };
 
@@ -152,9 +130,9 @@ const Forgotpass = () => {
 
     // Check if the inputValue is empty
     if (!inputValue) {
-        emailErrors.email = "Email or phone number is required.";
-    } else if (!validateEmail(inputValue) && !validatePhoneNumber(inputValue)) {
-        emailErrors.email = "Please enter a valid email address or a 10-digit phone number.";
+        emailErrors.email = "Email is required.";
+    } else if (!validateEmail(inputValue)) {
+        emailErrors.email = "Please enter a valid email address";
     }
 
     // If there are email errors, set them in the errors state
@@ -169,7 +147,7 @@ const Forgotpass = () => {
      if (!isVerified) {
       setErrors((prevErrors) => ({
         ...prevErrors,
-        verification: "Please verify your email or phone number first",
+        verification: "Please verify your email",
       }));
     } else if (Object.keys(passwordErrors).length > 0) {
       setErrors(passwordErrors);
@@ -189,37 +167,30 @@ const Forgotpass = () => {
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gray-100">
   <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md mx-4 sm:mx-6 lg:max-w-lg">
-    <h1 className="text-3xl font-bold text-center mb-6 text-green-500">
+    <h1 className="text-3xl font-bold text-center mb-6 text-blue-500">
           Forgot Password
         </h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Input */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Email or Phone Number
+              Email id 
             </label>
             <div className="flex items-center space-x-2">
               <input
                 type="text"
-                placeholder="Email id or number"
+                placeholder="Email id"
                 value={inputValue}
-                maxLength={determineMaxLength()}
+                maxLength="30"
                 // maxLength={validatePhoneNumber(email)  ? 10 : 30} 
                 onChange={handleEmailChange}
-                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
-                // onInput={(e)=>{
-                //   e.target.value=e.target.value.replace(/[^0-9]/g,'');
-                //   if(e.target.value && !/^[6-9]/.test(e.target.value)){
-                //     e.target.value='';
-                //   }
-                // }}
-                // required
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
               />
               <button
                 type="button"
                 onClick={handleVerify}
-                className="bg-green-500 text-white py-2 px-4 rounded-2xl h-[40px] w-[70px] hover:bg-green-400 focus:outline-none"
-                disabled={!validateEmail(inputValue) && !validatePhoneNumber(inputValue)}
+                className="bg-blue-500 text-white py-2 px-4 rounded-2xl h-[40px] w-[70px]  focus:outline-none"
+                // disabled={!validateEmail(inputValue)}
               >
                 Verify
               </button>
@@ -244,13 +215,13 @@ const Forgotpass = () => {
                   value={otpValue}
                   onChange={handleOtpChange}
                   maxLength="6"
-                  className="w-[50%] h-[50px] outline-none rounded-xl bg-green-500 text-white text-center"
+                  className="w-[50%] h-[50px] outline-none rounded-xl bg-blue-500 text-white text-center"
                   required
                 />
                 <button
                   type="button"
                   onClick={handleOtpVerify}
-                  className="bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 focus:outline-none"
+                  className="bg-blue-500 text-white py-2 px-4 rounded-lg  focus:outline-none"
                 >
                   Verify OTP
                 </button>
@@ -260,7 +231,7 @@ const Forgotpass = () => {
               )}
               {/* Timer display */}
               {timer > 0 ? (
-                <p className="text-sm text-green-500 mt-2">
+                <p className="text-sm text-blue-500 mt-2">
                   Resend OTP in {timer} seconds
                 </p>
               ) : (
@@ -276,7 +247,9 @@ const Forgotpass = () => {
             </div>
           )}
 
-          {/* Password Creation Input */}
+          {/* Password Section (only visible after otp verification) */}
+          {showMessage && (<>
+          {/* createPassword input */}
           <div>
             <label className="block text-sm font-medium text-gray-700">
               Create Password
@@ -288,7 +261,7 @@ const Forgotpass = () => {
                 value={createPassword}
                 onChange={(e) => setCreatePassword(e.target.value)}
                 maxLength={8}
-                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
+                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 style={{
                   WebkitTextSecurity: showCreatePassword ? "none" : "disc",
                 }}
@@ -315,7 +288,7 @@ const Forgotpass = () => {
                   /[A-Z]/.test(createPassword) &&
                   /\d/.test(createPassword) &&
                   /[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
-                    <FaCheck className=" text-green-500  mr-2 h-4 w-4" />
+                    <FaCheck className=" text-blue-500  mr-2 h-4 w-4" />
                   ) : (
                     <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
@@ -332,7 +305,7 @@ const Forgotpass = () => {
                 {/* Length Validation */}
                 <div className="flex items-center">
                   {createPassword.length >= 8 ? (
-                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
+                    <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                   ) : (
                     <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
@@ -342,7 +315,7 @@ const Forgotpass = () => {
                 {/* Uppercase Letter Validation */}
                 <div className="flex items-center">
                   {/[A-Z]/.test(createPassword) ? (
-                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
+                    <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                   ) : (
                     <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
@@ -354,7 +327,7 @@ const Forgotpass = () => {
                 {/* Number Validation */}
                 <div className="flex items-center ">
                   {/\d/.test(createPassword) ? (
-                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
+                    <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                   ) : (
                     <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
@@ -364,7 +337,7 @@ const Forgotpass = () => {
                 {/* Symbol Validation */}
                 <div className="flex items-center">
                   {/[!@#$%^&*(),.?":{}|<>]/.test(createPassword) ? (
-                    <FaCheck className="mr-2 h-4 w-4 text-green-500" />
+                    <FaCheck className="mr-2 h-4 w-4 text-blue-500" />
                   ) : (
                     <ImCross className="mr-2 text-red-500 h-3 w-3" />
                   )}
@@ -387,7 +360,7 @@ const Forgotpass = () => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 maxLength={8}
-                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-500"
+                className="mt-1 w-[100%] px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 style={{
                   WebkitTextSecurity: showConfirmPassword ? "none" : "disc",
                 }}
@@ -413,18 +386,20 @@ const Forgotpass = () => {
           {/* Submit button */}
           <button
             type="submit"
-            className="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 focus:outline-none"
+            className="w-full text-white py-2 px-4 rounded-lg bg-blue-500 focus:outline-none hover:bg-blue-500"
           >
             Reset
           </button>
           <div className="flex justify-center mt-4">
                 <p>Back To<button
-                  className="text-green-500 texpy-2 px-4 rounded-lg focus:outline-none underline"
+                  className="text-blue-500 texpy-2 px-4 rounded-lg focus:outline-none underline"
                 >
                  <Link to='/login'>Login</Link>
                 </button>
                 </p>
               </div>
+              </>
+            )}
         </form>
 
         {/* Success Popup */}
@@ -435,10 +410,10 @@ const Forgotpass = () => {
                 className="absolute top-2 right-2 cursor-pointer"
                 onClick={handleClosePopup}
               />
-              <h2 className="text-3xl font-bold text-green-500 mb-4">Success!</h2>
+              <h2 className="text-3xl font-bold text-blue-500 mb-4">Success!</h2>
               <p className="text-lg">Your password has been successfully reset.</p>
               <button
-                className="mt-4 bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-400 focus:outline-none"
+                className="mt-4 bg-blue-500 text-white py-2 px-4 rounded-lg  focus:outline-none"
                 onClick={handleClosePopup}
               >
                 Close
