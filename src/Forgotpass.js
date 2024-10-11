@@ -196,7 +196,7 @@ const Forgotpass = () => {
               </button>
             </div>
             {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              <p className="text-red-500 text-sm mt-1 ">{errors.email }</p>
             )}
              {errors.verification && (
               <p className="text-red-500 text-sm mt-1">{errors.verification}</p>
